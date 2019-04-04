@@ -7,10 +7,11 @@ before_install:
   - mkdir geckodriver
   - tar -xzf geckodriver-v0.24.0-linux64.tar.gz -C geckodriver
   - export DRIVER_PATH=$PATH:$PWD/geckodriver
+  - echo DRIVER_PATH
 script:
   - bundle exec rake
 rvm:
-  - 2.4.2
+  - 2.6.0
 env:
   matrix:
     - SOLIDUS_BRANCH=v2.5 DB=postgres
