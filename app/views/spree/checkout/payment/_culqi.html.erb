@@ -12,9 +12,10 @@
   Culqi.useClasses = true;
   Culqi.init();
 
+  var cuyculqi = jQuery.noConflict();
   var paymentMethodId = "<%= payment_method.id %>";
-  Spree.culqiPaymentMethod = $('#payment_method_' + paymentMethodId);
-  $('.installmentField').toggle();
+  Spree.culqiPaymentMethod = cuyculqi('#payment_method_' + paymentMethodId);
+  cuyculqi('.installmentField').toggle();
 
   function addCulqiField(className, value) {
     Spree.culqiPaymentMethod.append("<input type='hidden' value='" + value + "' class='"+ className +"'/>");
@@ -25,7 +26,7 @@
     for(var i=0; i < options.length; i++) {
       select.append("<option value='" + options[i] + "'>" + options[i] + "</option");
     }
-    $('.installmentField').toggle();
+    cuyculqi('.installmentField').toggle();
   }
 
   function goToNextStep() {
@@ -34,7 +35,7 @@
 
   function allowedInstallments(token) {
     var installments = token['iin']['installments_allowed'];
-    var submitBtn = $('#checkout_form_payment [data-hook=buttons]');
+    var submitBtn = cuyculqi('#checkout_form_payment [data-hook=buttons]');
     if (installments.length > 0) {
       (installments.indexOf(0) !== -1)  ? null : installments.unshift(0);
       Spree.culqiPaymentMethod.find('#card_number, #card_expiry, #card_code').prop("disabled", true);
@@ -54,19 +55,19 @@
       Spree.culqiPaymentMethod.append("<input type='hidden' name='<%= param_prefix %>[gateway_payment_profile_id]' value='" + Culqi.token['id'] + "'/>");
       allowedInstallments(Culqi.token)
     } else if (Culqi.error) {
-      $('#culqiError').html(Culqi.error['user_message']);
-      return $('#culqiError').show();
+      cuyculqi('#culqiError').html(Culqi.error['user_message']);
+      return cuyculqi('#culqiError').show();
     }
   }
 
   Spree.culqiPaymentMethod.find('.cardCode').addClass('culqi-cvv');
 
-  $(document).ready(function() {
+  cuyculqi(document).ready(function() {
     Spree.culqiPaymentMethod.prepend("<div id='culqiError' class='errorExplanation' style='display:none'></div>");
-    $('#checkout_form_payment [data-hook=buttons]').click(function(e) {
+    cuyculqi('#checkout_form_payment [data-hook=buttons]').click(function(e) {
       if (Spree.culqiPaymentMethod.is(':visible')) {
         e.preventDefault();
-        var expiration = $('.cardExpiry:visible').payment('cardExpiryVal');
+        var expiration = cuyculqi('.cardExpiry:visible').payment('cardExpiryVal');
         var cardNumber = Spree.culqiPaymentMethod.find('.cardNumber').val().replace(/ /g,'')
         addCulqiField('culqi-email', '<%= @order.email %>');
         addCulqiField('culqi-expm', expiration['month']);
